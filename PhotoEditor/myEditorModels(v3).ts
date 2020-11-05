@@ -8,7 +8,7 @@ export type sizeType = {
     height: number
 };
 
-export type colorType = "red" | "black" | "blue" | "green"| "orange" | "purple";
+export type colorType = "red" | "black" | "white" | "blue" | "green"| "orange" | "purple";
 
 //  export type rectangleType = {
 //     color: colorType 

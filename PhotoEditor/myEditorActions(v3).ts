@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { toEditorSettings } from "typescript";
 import {
     sizeType,
     colorType,
@@ -17,6 +18,36 @@ import {
     historyType,
     photoEditorType,
 } from "./myEditorModels(v3)";
+
+//create editor ------------------------------------------------------------------------------------------------------------------------------------
+//function for применения полученных настроек к объекту. Вопрос, применятся ли настройки к объекту
+//work with bufer obmening
+
+
+function createDefaultEditor(): photoEditorType {
+    return {
+        space: new ImageData(800, 600),
+        currentState: {
+            filter: 'none',
+            currentObject: null,
+            primitiveSettings: {
+                backgroundColor: 'white',
+                borderColor: 'black',
+                borderSize: 5,
+            },
+            textSettings: {
+                color: 'black',
+                font: 'Calibri',
+                textSize: 11
+            }
+        },
+        actionHistory: {
+            redo: [],
+            undo: []
+        }
+    }
+}
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function deepFreeze(o: any): any {
@@ -37,10 +68,36 @@ function deepFreeze(o: any): any {
     return o;
 }
 //undo
+function undo(photoEditor: photoEditorType): photoEditorType {
+    deepFreeze(photoEditor);
+    const newPhotoEditor: photoEditorType = photoEditor;
+    const newRedo = newPhotoEditor.actionHistory.redo;
+    const newUndo = newPhotoEditor.actionHistory.undo;
+    newRedo.push(newUndo.pop());
+    return {
+        ...newPhotoEditor,
+        actionHistory: {
+            redo: newRedo,
+            undo: newUndo
+        }
+    }
+}
+
 //redo
-//create editor ------------------------------------------------------------------------------------------------------------------------------------
-//function for применения полученных настроек к объекту
-//work with bufer obmening
+function redo(photoEditor: photoEditorType): photoEditorType {
+    deepFreeze(photoEditor);
+    const newPhotoEditor: photoEditorType = photoEditor;
+    const newRedo = newPhotoEditor.actionHistory.redo;
+    const newUndo = newPhotoEditor.actionHistory.undo;
+    newUndo.push(newRedo.pop());
+    return {
+        ...newPhotoEditor,
+        actionHistory: {
+            redo: newRedo,
+            undo: newUndo
+        }
+    }
+}
 
 function highlightingArea(
     photoEditor: photoEditorType,
@@ -78,28 +135,47 @@ function moveSelectedArea(
 function cutOnSelection(photoEditor: photoEditorType): photoEditorType {
     //--------------------------------------
     deepFreeze(photoEditor);
-    const newCanvas: spaceType = photoEditor.space;
+    const newSpace: spaceType = photoEditor.space;
+    const highlightedArea = photoEditor.currentState.currentObject;
+    const yStart: number = highlightedArea.point.y;
+    const xStart: number = highlightedArea.point.x;
+    const yEnd: number = highlightedArea.size.height;
+    const xEnd: number = highlightedArea.size.width;
+    for (let y = yStart; y <= yEnd; y++) {
+        const start: number = y * newSpace.width * 4 + xStart * 4;
+        const end: number = y * newSpace.width * 4 + xEnd * 4 + 3;
+        newSpace.data.fill(255, start, end);
+    }
+    return {
+        ...photoEditor,
+        space: new ImageData(newSpace.data, newSpace.width, newSpace.height),
+        currentState: {
+            ...photoEditor.currentState,
+            currentObject: null
+        }
+    }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function deletingSelectedArea(photoEditor: photoEditorType): photoEditorType {
+    //--------------------------------------
+    deepFreeze(photoEditor);
+    const newSpace: spaceType = photoEditor.space;
     const highlightedArea = photoEditor.currentState.currentObject;
     const yStart: number = highlightedArea.point.y;
     const xStart: number = highlightedArea.point.x;
     const yEnd: number = yStart + highlightedArea.size.height;
-    const xEnd: number = yStart + highlightedArea.size.width;
-    const start: number;
-    for (let i = yStart; yEnd; 1) {
-        newCanvas.data.fill(255);
+    const xEnd: number = xStart + highlightedArea.size.width;
+    const start: number = yStart * newSpace.width * 4 + xStart * 4;
+    const end: number = yEnd * newSpace.width * 4 + xEnd * 4;
+    return {
+        ...photoEditor,
+        space: new ImageData(newSpace.data.fill(255, start, end), newSpace.width, newSpace.height),
+        currentState: {
+            ...photoEditor.currentState,
+            currentObject: null
+        }
     }
-    return changeCanvas(photoEditor, data);
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function deletingSelectedArea(
-    photoEditor: photoEditorType,
-    rectangle: rectangleType
-): photoEditorType {
-    //------------------------------------------
-    deepFreeze(photoEditor);
-    // const x;
-    return changeCanvas(photoEditor, data);
 }
 
 function insertText(
@@ -171,7 +247,6 @@ function changeTextPosition(
     photoEditor: photoEditorType,
     newTextPosition: pointType
 ): photoEditorType {
-    //тк мы всегда можем двигать что-то одно, можно двигать любой object
     deepFreeze(photoEditor);
     return {
         ...photoEditor,
