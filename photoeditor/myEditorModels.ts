@@ -65,18 +65,19 @@ export type textSettingsType = {
 
 export type imageType = {
    filePath: string,
-   size: sizeType 
+   size: sizeType,
+   position: pointType 
 };
 
 
 export type spaceType = ImageData
 
-export type highlightedAreaType = {
+export type selectedAreaType = {
     size: sizeType,
     point: pointType
 }
 
-export type currentObjectType = primitiveType| artObjectType| highlightedAreaType| textType
+export type currentObjectType = primitiveType| artObjectType| selectedAreaType| textType
 
 export type currentStateType = {
     filter: filtersType,
