@@ -24,19 +24,34 @@ import {
 //work with bufer obmening
 
 
-function createDefaultEditor(): photoEditorType {
+export function createDefaultEditor(): photoEditorType {
     return {
-        space: new ImageData(800, 600),
+        space: null,
         currentState: {
             filter: 'none',
             currentObject: null,
             primitiveSettings: {
-                backgroundColor: 'white',
-                borderColor: 'black',
-                borderSize: 5,
+                backgroundColor: {
+                    r: 255,
+                    g: 255,
+                    b: 255,
+                    a: 255
+                }, 
+                borderColor: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 255
+                },
+                borderSize: 20,
             },
             textSettings: {
-                color: 'black',
+                color: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 255
+                },
                 font: 'Calibri',
                 textSize: 11
             }
@@ -67,8 +82,8 @@ function deepFreeze(o: any): any {
     })
     return o
 }
-//undo
-function undo(photoEditor: photoEditorType): photoEditorType {
+
+export function undo(photoEditor: photoEditorType): photoEditorType {
     deepFreeze(photoEditor)
     const newPhotoEditor: photoEditorType = photoEditor
     const newRedo = newPhotoEditor.actionHistory.redo
@@ -83,8 +98,8 @@ function undo(photoEditor: photoEditorType): photoEditorType {
     }
 }
 
-//redo
-function redo(photoEditor: photoEditorType): photoEditorType {
+
+export function redo(photoEditor: photoEditorType): photoEditorType {
     deepFreeze(photoEditor)
     const newPhotoEditor: photoEditorType = photoEditor
     const newRedo = newPhotoEditor.actionHistory.redo
@@ -99,7 +114,7 @@ function redo(photoEditor: photoEditorType): photoEditorType {
     }
 }
 
-function highlightingArea(
+export function highlightingArea(
     photoEditor: photoEditorType,
     newArea: highlightedAreaType
 ): photoEditorType {
@@ -114,7 +129,7 @@ function highlightingArea(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function moveSelectedArea(
+export function repositionSelectedArea(
     photoEditor: photoEditorType,
     newPosition: pointType
 ): photoEditorType {
@@ -132,7 +147,7 @@ function moveSelectedArea(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function cutOnSelection(photoEditor: photoEditorType): photoEditorType {
+export function cutOnSelection(photoEditor: photoEditorType): photoEditorType {
     //--------------------------------------
     deepFreeze(photoEditor)
     const newSpace: spaceType = photoEditor.space
@@ -157,7 +172,7 @@ function cutOnSelection(photoEditor: photoEditorType): photoEditorType {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function deletingSelectedArea(photoEditor: photoEditorType): photoEditorType {
+export function deletingSelectedArea(photoEditor: photoEditorType): photoEditorType {
     //--------------------------------------
     deepFreeze(photoEditor)
     const newSpace: spaceType = photoEditor.space
@@ -178,7 +193,7 @@ function deletingSelectedArea(photoEditor: photoEditorType): photoEditorType {
     }
 }
 
-function insertText(
+export function insertText(
     photoEditor: photoEditorType,
     newText: textType
 ): photoEditorType {
@@ -192,7 +207,7 @@ function insertText(
     }
 }
 
-function choiceTextSize(
+export function choiceTextSize(
     photoEditor: photoEditorType,
     newSize: number
 ): photoEditorType {
@@ -209,7 +224,7 @@ function choiceTextSize(
     }
 }
 
-function choiceBoxTextSize(
+export function choiceBoxTextSize(
     photoEditor: photoEditorType,
     newSize: sizeType
 ): photoEditorType {
@@ -226,7 +241,7 @@ function choiceBoxTextSize(
     }
 }
 
-function changeTextColor(
+export function changeTextColor(
     photoEditor: photoEditorType,
     newTextColor: colorType
 ): photoEditorType {
@@ -243,7 +258,7 @@ function changeTextColor(
     }
 }
 
-function changeTextPosition(
+export function changeTextPosition(
     photoEditor: photoEditorType,
     newTextPosition: pointType
 ): photoEditorType {
@@ -260,7 +275,7 @@ function changeTextPosition(
     }
 }
 
-function changingColorText(
+export function changingColorText(
     photoEditor: photoEditorType,
     newColor: colorType
 ): photoEditorType {
@@ -277,7 +292,7 @@ function changingColorText(
     }
 }
 
-function insertingPrimitive(
+export function insertingPrimitive(
     photoEditor: photoEditorType,
     newPrimitive: primitiveType
 ): photoEditorType {
@@ -291,7 +306,7 @@ function insertingPrimitive(
     }
 }
 
-function resizePrimitive(
+export function resizePrimitive(
     photoEditor: photoEditorType,
     newSize: sizeType
 ): photoEditorType {
@@ -308,7 +323,7 @@ function resizePrimitive(
     }
 }
 
-function repositionPrimitive(
+export function repositionPrimitive(
     photoEditor: photoEditorType,
     newPoint: pointType
 ): photoEditorType {
@@ -326,7 +341,7 @@ function repositionPrimitive(
     }
 }
 /////////////////////
-function fillingPrimitive(
+export function fillingPrimitive(
     photoEditor: photoEditorType,
     newBackColor: colorType
 ): photoEditorType {
@@ -343,12 +358,12 @@ function fillingPrimitive(
     }
 }
 
-// function insertingArt(photoEditor: photoEditorType, filePath: string): photoEditorType {
+// export function insertingArt(photoEditor: photoEditorType, filePath: string): photoEditorType {
 //     deepFreeze(photoEditor);
 //     return changeCanvas(photoEditor, data)
 // }
 
-function usingFilters(
+export function usingFilters(
     photoEditor: photoEditorType,
     newFilter: filtersType
 ): photoEditorType {
@@ -362,27 +377,27 @@ function usingFilters(
     }
 }
 
-// function fromComp(photoEditor: photoEditorType, filePath: string): photoEditorType{
+// export function fromComp(photoEditor: photoEditorType, filePath: string): photoEditorType{
 //     deepFreeze(photoEditor);
 //     return (photoEditor)
 // }
 
-// function fromPixels(photoEditor: photoEditorType): Editor {
+// export function fromPixels(photoEditor: photoEditorType): Editor {
 //     return (photoEditor)
 // }
 
-// function fromCamera(photoEditor: photoEditorType): Editor {
+// export function fromCamera(photoEditor: photoEditorType): Editor {
 //     deepFreeze(photoEditor);
 //     return (photoEditor)
 // }
 
-// function exportJPEG(photoEditor: photoEditorType): photoEditorType {
+// export function exportJPEG(photoEditor: photoEditorType): photoEditorType {
 //     deepFreeze(photoEditor);
 //     const file =
 //       return file
 // }
 
-// function exportPNG(photoEditor: photoEditorType): photoEditorType {
+// export function exportPNG(photoEditor: photoEditorType): photoEditorType {
 //     deepFreeze(photoEditor);
 //     return
 // }

@@ -8,7 +8,12 @@ export type sizeType = {
     height: number
 };
 
-export type colorType = 'red' | 'black' | 'white' | 'blue' | 'green'| 'orange' | 'purple';
+export type colorType = {
+    r: number,
+    g: number,
+    b: number,
+    a: number
+};
 
 //  export type rectangleType = {
 //     color: colorType 
@@ -35,8 +40,7 @@ export type primitiveSettingsType = {
 export type primitiveType = {
     size: sizeType,
     point: pointType,
-    primitiveChoose: primitiveChooseType,
-    primitiveSettings: primitiveSettingsType
+    primitiveChoose: primitiveChooseType
 };
 
 export type artObjectType = {
@@ -51,7 +55,6 @@ export type textType = {
     size: sizeType,
     value: string,
     point: pointType,
-    textSettings: textSettingsType
 };
 
 export type textSettingsType = {
@@ -84,7 +87,7 @@ export type currentStateType = {
 
 export type historyType = {
     redo: Array<photoEditorType>,
-     undo: Array<photoEditorType>
+    undo: Array<photoEditorType>
 };
 
 
