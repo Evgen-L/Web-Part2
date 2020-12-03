@@ -19,10 +19,6 @@ import {
     photoEditorType,
 } from './myEditorModels'
 
-
-//work with bufer obmening
-
-
 export function createDefaultEditor(): photoEditorType {
     return {
         space: null,
@@ -150,11 +146,11 @@ export function cutOnSelection(photoEditor: photoEditorType): photoEditorType {
     //--------------------------------------
     deepFreeze(photoEditor)
     const newSpace: spaceType = photoEditor.space
-    const SelectedAreaType = photoEditor.currentState.currentObject
-    const yStart: number = SelectedAreaType.point.y
-    const xStart: number = SelectedAreaType.point.x
-    const yEnd: number = SelectedAreaType.size.height
-    const xEnd: number = SelectedAreaType.size.width
+    const SelectedArea = photoEditor.currentState.currentObject
+    const yStart: number = SelectedArea.point.y
+    const xStart: number = SelectedArea.point.x
+    const yEnd: number = SelectedArea.size.height
+    const xEnd: number = SelectedArea.size.width
     for (let y = yStart; y <= yEnd; y++) {
         const start: number = y * newSpace.width * 4 + xStart * 4
         const end: number = y * newSpace.width * 4 + xEnd * 4 + 3
@@ -175,11 +171,11 @@ export function deletingSelectedArea(photoEditor: photoEditorType): photoEditorT
     //--------------------------------------
     deepFreeze(photoEditor)
     const newSpace: spaceType = photoEditor.space
-    const SelectedAreaType = photoEditor.currentState.currentObject
-    const yStart: number = SelectedAreaType.point.y
-    const xStart: number = SelectedAreaType.point.x
-    const yEnd: number = yStart + SelectedAreaType.size.height
-    const xEnd: number = xStart + SelectedAreaType.size.width
+    const SelectedArea = photoEditor.currentState.currentObject
+    const yStart: number = SelectedArea.point.y
+    const xStart: number = SelectedArea.point.x
+    const yEnd: number = yStart + SelectedArea.size.height
+    const xEnd: number = xStart + SelectedArea.size.width
     const start: number = yStart * newSpace.width * 4 + xStart * 4
     const end: number = yEnd * newSpace.width * 4 + xEnd * 4
     return {
@@ -338,7 +334,7 @@ export function repositionPrimitive(
         },
     }
 }
-/////////////////////
+
 export function fillingPrimitive(
     photoEditor: photoEditorType,
     newBackColor: colorType
@@ -356,12 +352,10 @@ export function fillingPrimitive(
     }
 }
 
-// export type primitiveSettingsType = {
-//     
-//     borderSize: number
-// };
-
-export function recolorBorderPrimitive(photoEditor: photoEditorType, newColor: colorType): photoEditorType {
+export function recolorBorderPrimitive(
+    photoEditor: photoEditorType, 
+    newColor: colorType
+): photoEditorType {
     deepFreeze(photoEditor)
     return {
         ...photoEditor,
@@ -375,7 +369,10 @@ export function recolorBorderPrimitive(photoEditor: photoEditorType, newColor: c
     }
 }
 
-export function resizeBorderPrimitive(photoEditor: photoEditorType, newSize: number): photoEditorType {
+export function resizeBorderPrimitive(
+    photoEditor: photoEditorType, 
+    newSize: number
+): photoEditorType {
     deepFreeze(photoEditor)
     return {
         ...photoEditor,
