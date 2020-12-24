@@ -21,7 +21,7 @@ const newPhotoEditor: photoEditorType = {
 }
 
 describe('fillingPrimitive', () => {
-    test('choise background primitive', () => {
+    test('choice background primitive', () => {
         expect(fillingPrimitive(photoEditor, newbackgroundColor)).toStrictEqual(newPhotoEditor)
     })
 }) 

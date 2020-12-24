@@ -87,8 +87,8 @@ export type currentStateType = {
 };
 
 export type historyType = {
-    redo: Array<photoEditorType>,
-    undo: Array<photoEditorType>
+    redo: Array<photoEditorType>, //next
+    undo: Array<photoEditorType>  //prev
 };
 
 
@@ -98,3 +98,7 @@ export type photoEditorType = {
     currentState: currentStateType,
     actionHistory: historyType
 };
+
+
+
+//типы с большой буквы, а переменны с маленькой 
